@@ -1,12 +1,12 @@
 import prisma from "../db"
 
-export const getAccountAssets = async (req, res) => {
+export const getAccountsAssets = async (req, res) => {
 
   const accountAssets = await prisma.accountAssets.findMany()
   res.json({data: accountAssets})
 }
 
-export const getAccountLiabilities = async (req, res) => {
+export const getAccountsLiabilities = async (req, res) => {
 
   const accountLiabilities = await prisma.accountLiabilities.findMany()
   res.json({data: accountLiabilities})
@@ -30,7 +30,7 @@ export const createAccountLiabilities = async (req, res) => {
     data: {
       name: req.body.name,
       currency: req.body.currency,
-      princial: req.body.princial,
+      principal: req.body.principal,
       startDate: req.body.startDate,
       term: req.body.term,
   }})

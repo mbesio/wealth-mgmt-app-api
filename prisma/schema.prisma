@@ -24,7 +24,7 @@ model AccountLiabilities {
   createdAt        DateTime           @default(now())
   name             String             @unique @db.VarChar(255)
   currency         String
-  princial         Float
+  principal        Float
   startDate        DateTime
   term             Int
   inputLiabilities InputLiabilities[]
@@ -33,7 +33,7 @@ model AccountLiabilities {
 model InputAssets {
   id                 String        @id @default(uuid())
   createdAt          DateTime      @default(now())
-  updatedAt          DateTime
+  updatedAt          DateTime      @updatedAt
   date               DateTime
   amount             Float
   belongsToAccountId String
@@ -43,7 +43,7 @@ model InputAssets {
 model InputLiabilities {
   id                 String             @id @default(uuid())
   createdAt          DateTime           @default(now())
-  updatedAt          DateTime
+  updatedAt          DateTime           @updatedAt
   date               DateTime
   remainingPrincipal Float
   belongsToAccountId String

@@ -1,22 +1,26 @@
 import { Router } from 'express'
 import {
-  getAccountAssets,
-  getAccountLiabilities,
+  getAccountsAssets,
+  getAccountsLiabilities,
   createAccountAssets,
   createAccountLiabilities
    } from './handlers/accounts'
+import {
+  createInputAssets
+} from './handlers/inputs'
 
 const router = Router()
 
-router.get('/account-assets', getAccountAssets)
-router.get('/account-liabilites', getAccountLiabilities)
+router.get('/accounts-assets', getAccountsAssets)
+router.get('/accounts-liabilities', getAccountsLiabilities)
 
 router.post('/create-account-assets', createAccountAssets)
-router.post('/create-account-liabilites', createAccountLiabilities)
+router.post('/create-account-liabilities', createAccountLiabilities)
 
-router.post('/input-assets', (req,res) => {})
-router.put('/input-assets/:id', (req,res) => {})
+router.post('/input-assets', createInputAssets)
 router.post('/input-liabilities', (req,res) => {})
+
+router.put('/input-assets/:id', (req,res) => {})
 router.put('/input-liabilities/:id', (req,res) => {})
 
 router.get('/summary-metrics', (req,res) => {})
