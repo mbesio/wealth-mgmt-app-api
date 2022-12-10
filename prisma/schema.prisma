@@ -9,3 +9,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model AccountAssets {
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  name        String        @unique @db.VarChar(255)
+  currency    String
+  category    String
+  inputAssets InputAssets[]
+}
+
+model AccountLiabilities {
+  id               String             @id @default(uuid())
+  createdAt        DateTime           @default(now())
+  name             String             @unique @db.VarChar(255)
+  currency         String
+  princial         Float
+  startDate        DateTime
+  term             Int
+  inputLiabilities InputLiabilities[]
+}
+
+model InputAssets {
+  id                 String        @id @default(uuid())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime
+  date               DateTime
+  amount             Float
+  belongsToAccountId String
+  belongsTo          AccountAssets @relation(fields: [belongsToAccountId], references: [id])
+}
+
+model InputLiabilities {
+  id                 String             @id @default(uuid())
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime
+  date               DateTime
+  remainingPrincipal Float
+  belongsToAccountId String
+  belongsTo          AccountLiabilities @relation(fields: [belongsToAccountId], references: [id])
+}
+
+model FX {
+  id   String   @id @default(uuid())
+  date DateTime
+  pair String
+  rate Float
+}
