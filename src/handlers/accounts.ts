@@ -31,6 +31,7 @@ export const createAccountLiabilities = async (req, res) => {
       name: req.body.name,
       currency: req.body.currency,
       principal: req.body.principal,
+      interestRate: req.body.interestRate,
       startDate: req.body.startDate,
       term: req.body.term,
   }})

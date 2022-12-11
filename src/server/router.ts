@@ -23,6 +23,7 @@ router.post('/create-account-assets', createAccountAssets)
 router.post('/create-account-liabilities', createAccountLiabilities)
 
 router.post('/input-assets', createInputAssets)
+//ideally this is not required and I just compute the repayment plan based on the loan parameters
 router.post('/input-liabilities', createInputLiabilities)
 
 router.put('/input-assets/:id', (req,res) => {})

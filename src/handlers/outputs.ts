@@ -1,8 +1,7 @@
 import prisma from '../server/db'
-// import find from 'lodash.find'
 import filter from 'lodash.filter'
 import { FX } from '@prisma/client'
-import { getFxRateTable, getFxRate } from '../utils/fx'
+import { getFxRateTable, getFxRate, combineAssetsByDate } from '../utils/fx'
 
 export const getTimeseries = async (req, res) => {
 
@@ -26,28 +25,25 @@ export const getTimeseries = async (req, res) => {
     }
   })
 
-  const helper = {}
-  const groupDates = inputAssetsWithCurrencies.reduce((acc, item)=> {
-    var key = item.date.toString()
-    if(!helper[key]) {
-      helper[key] = Object.assign({}, item)
-      acc.push(helper[key])
-    } else {
-      helper[key].amountEUR += item.amountEUR
-      helper[key].amountUSD += item.amountUSD
-    }
-    return acc
-  }, [])
+  // need to add the liabilities part
+  const timeseries = combineAssetsByDate(inputAssetsWithCurrencies)
 
-  const dates = groupDates.map(item => item.date)
-  const amountEUR = groupDates.map(item => item.amountEUR)
-  const amountUSD = groupDates.map(item => item.amountUSD)
+  const dates = timeseries.map(item => item.date)
+  const amountEUR = timeseries.map(item => item.amountEUR)
+  const amountUSD = timeseries.map(item => item.amountUSD)
 
   res.json({
     data: {
       dates,
-      amountEUR,
-      amountUSD
+      assets: {
+        amountEUR,
+        amountUSD
+      },
+      liabilities: {}
     }
   })
+}
+
+export const getSummaryMetrics = async (req, res) => {
+
 }

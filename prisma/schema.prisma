@@ -24,8 +24,9 @@ model AccountLiabilities {
   createdAt        DateTime           @default(now())
   name             String             @unique @db.VarChar(255)
   currency         String
-  principal        Float
   startDate        DateTime
+  principal        Float
+  interestRate     Float
   term             Int
   inputLiabilities InputLiabilities[]
 }
