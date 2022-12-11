@@ -4,10 +4,15 @@ import {
   getAccountsLiabilities,
   createAccountAssets,
   createAccountLiabilities
-   } from './handlers/accounts'
+   } from '../handlers/accounts'
 import {
-  createInputAssets
-} from './handlers/inputs'
+  createFx,
+  createInputAssets,
+  createInputLiabilities
+} from '../handlers/inputs'
+import {
+  getTimeseries
+} from '../handlers/outputs'
 
 const router = Router()
 
@@ -18,16 +23,16 @@ router.post('/create-account-assets', createAccountAssets)
 router.post('/create-account-liabilities', createAccountLiabilities)
 
 router.post('/input-assets', createInputAssets)
-router.post('/input-liabilities', (req,res) => {})
+router.post('/input-liabilities', createInputLiabilities)
 
 router.put('/input-assets/:id', (req,res) => {})
 router.put('/input-liabilities/:id', (req,res) => {})
 
+router.post('/addfx', createFx)
+
 router.get('/summary-metrics', (req,res) => {})
 router.get('/summary-metrics/currency', (req,res) => {})
 router.get('/summary-metrics/type', (req,res) => {})
-router.get('/timeseries', (req, res)=> {
-  res.json({message: 'timeseries'})
-})
+router.get('/timeseries', getTimeseries)
 
 export default router

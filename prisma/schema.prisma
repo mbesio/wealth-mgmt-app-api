@@ -38,6 +38,8 @@ model InputAssets {
   amount             Float
   belongsToAccountId String
   belongsTo          AccountAssets @relation(fields: [belongsToAccountId], references: [id])
+
+  @@unique([date, belongsToAccountId])
 }
 
 model InputLiabilities {
@@ -53,6 +55,8 @@ model InputLiabilities {
 model FX {
   id   String   @id @default(uuid())
   date DateTime
-  pair String
+  pair String // this is pair vs Curr/USD
   rate Float
+
+  @@unique([date, pair])
 }

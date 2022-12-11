@@ -1,4 +1,4 @@
-import prisma from "../db"
+import prisma from "../server/db"
 
 export const getAccountsAssets = async (req, res) => {
 

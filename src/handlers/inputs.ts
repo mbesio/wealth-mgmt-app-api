@@ -1,4 +1,4 @@
-import prisma from "../db"
+import prisma from "../server/db"
 
 export const createInputAssets = async (req, res) => {
 
@@ -22,4 +22,17 @@ export const createInputLiabilities = async (req, res) => {
     }
   })
   res.json({data: inputLiabilities})
+}
+
+
+export const createFx = async (req, res) => {
+
+  const fx = await prisma.fX.create({
+    data: {
+      date: req.body.date,
+      pair: req.body.pair,
+      rate: req.body.rate
+    }
+  })
+  res.json({data: fx})
 }

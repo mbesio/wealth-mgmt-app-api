@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/server/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,8 @@
   "dependencies": {
     "@prisma/client": "^4.7.1",
     "express": "^4.18.2",
+    "lodash.filter": "^4.6.0",
+    "lodash.find": "^4.6.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
