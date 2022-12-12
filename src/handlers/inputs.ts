@@ -1,4 +1,10 @@
 import prisma from "../server/db"
+import { getInputLiabilitesTimeSeries } from "../utils/liabilities"
+
+export const getInputLiabilites = async (req, res) => {
+  const inputLiabilitesTimeSeries = await getInputLiabilitesTimeSeries()
+  res.json({data: inputLiabilitesTimeSeries })
+}
 
 export const createInputAssets = async (req, res) => {
 

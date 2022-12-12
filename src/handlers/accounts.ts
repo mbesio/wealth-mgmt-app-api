@@ -38,3 +38,12 @@ export const createAccountLiabilities = async (req, res) => {
 
   res.json({data: accountLiabilities})
 }
+
+export const deleteAccountLiabilities = async (req, res) => {
+  const deletedAccountLiabilities = await prisma.accountLiabilities.delete({
+    where: {
+      id: req.params.id
+    }
+  })
+  res.json({data: `account ${req.params.id} succesfully deleted`})
+}

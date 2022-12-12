@@ -1,7 +1,8 @@
 import prisma from '../server/db'
 import filter from 'lodash.filter'
 import { FX } from '@prisma/client'
-import { getFxRateTable, getFxRate, combineAssetsByDate } from '../utils/fx'
+import { getFxRateTable, getFxRate, combineByDate } from '../utils/fx'
+import { getInputLiabilitesTimeSeries } from '../utils/liabilities'
 
 export const getTimeseries = async (req, res) => {
 
@@ -26,20 +27,38 @@ export const getTimeseries = async (req, res) => {
   })
 
   // need to add the liabilities part
-  const timeseries = combineAssetsByDate(inputAssetsWithCurrencies)
+  const timeseriesAssets = combineByDate(inputAssetsWithCurrencies)
+  const timeseriesLiabilites = await getInputLiabilitesTimeSeries()
+  console.log('timeseriesLiabilites ', timeseriesLiabilites)
 
-  const dates = timeseries.map(item => item.date)
-  const amountEUR = timeseries.map(item => item.amountEUR)
-  const amountUSD = timeseries.map(item => item.amountUSD)
+  const inputLiabilitiesWithCurrencies = timeseriesLiabilites.map(item => item.timeseries).flat()
+  const timeseriesLiabilities = combineByDate(inputLiabilitiesWithCurrencies)
+
+  const datesAssets = timeseriesAssets.map(item => item.date)
+  const amountEURAssets = timeseriesAssets.map(item => item.amountEUR)
+  const amountUSDAssets = timeseriesAssets.map(item => item.amountUSD)
+
+  const datesLiabilites = timeseriesLiabilities.map(item => item.date)
+  const amountEURLiabilites = timeseriesLiabilities.map(item => item.amountEUR)
+  const amountUSDLiabilites = timeseriesLiabilities.map(item => item.amountUSD)
+
+  // calculate the net worth
 
   res.json({
     data: {
-      dates,
-      assets: {
-        amountEUR,
-        amountUSD
+      netWorth: {
+
       },
-      liabilities: {}
+      assets: {
+        dates: datesAssets,
+        amountEUR: amountEURAssets,
+        amountUSD: amountUSDAssets
+      },
+      liabilities: {
+        dates: datesLiabilites,
+        amountEUR: amountEURLiabilites,
+        amountUSD: amountUSDLiabilites
+      }
     }
   })
 }

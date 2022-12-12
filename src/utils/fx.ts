@@ -1,3 +1,5 @@
+import { FX } from "@prisma/client"
+
 export const getFxRate = (inputCurrency, outputCurrency, rateTable) => {
   if(inputCurrency === outputCurrency) {
     return 1
@@ -11,7 +13,7 @@ export const getFxRate = (inputCurrency, outputCurrency, rateTable) => {
   return rateTable[`${inputCurrency}/USD`] * 1 / rateTable[`${outputCurrency}/USD`]
 }
 
-export const getFxRateTable = (fxRates) => fxRates.reduce((acc, item) => {
+export const getFxRateTable = (fxRates: FX[]) => fxRates.reduce((acc, item) => {
   const pair = item.pair
   const rate = item.rate
   return acc = {
@@ -20,7 +22,13 @@ export const getFxRateTable = (fxRates) => fxRates.reduce((acc, item) => {
   }
 }, {})
 
-export const combineAssetsByDate = input => {
+type CombineByDateInput = {
+  date: Date
+  amountEUR: Number
+  amountUSD: Number
+}
+
+export const combineByDate = (input : CombineByDateInput[]) : CombineByDateInput[] => {
   const helper = {}
   return input.reduce((acc, item)=> {
     var key = item.date.toString()
