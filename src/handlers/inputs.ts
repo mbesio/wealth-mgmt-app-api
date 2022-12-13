@@ -1,5 +1,17 @@
 import prisma from "../server/db"
+import { getfxRateAPI } from "../utils/fxapi"
 import { getInputLiabilitesTimeSeries } from "../utils/liabilities"
+
+export const getInputAssets = async (req, res) => {
+  const rate =  await getfxRateAPI('2020-12-25', 'EUR')
+  const inputAssets = await prisma.inputAssets.findMany({
+    include: {
+      belongsTo: true
+    }
+  })
+  // TO DO - clean up response and add FX conversion
+  res.json({data: inputAssets})
+}
 
 export const getInputLiabilites = async (req, res) => {
   const inputLiabilitesTimeSeries = await getInputLiabilitesTimeSeries()

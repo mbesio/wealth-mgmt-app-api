@@ -10,9 +10,11 @@ import {
   createFx,
   createInputAssets,
   createInputLiabilities,
+  getInputAssets,
   getInputLiabilites
 } from '../handlers/inputs'
 import {
+  getSummaryMetrics,
   getTimeseries
 } from '../handlers/outputs'
 
@@ -27,7 +29,7 @@ router.post('/create-account-liabilities', createAccountLiabilities)
 router.delete('/accounts-assets/:id', () => {})
 router.delete('/accounts-liabilities/:id', deleteAccountLiabilities)
 
-router.get('/input-assets', () => {})
+router.get('/input-assets', getInputAssets)
 router.get('/input-liabilities', getInputLiabilites)
 
 router.post('/input-assets', createInputAssets)
@@ -40,7 +42,7 @@ router.put('/input-liabilities/:id', (req,res) => {})
 
 router.post('/addfx', createFx)
 
-router.get('/summary-metrics', (req,res) => {})
+router.get('/summary-metrics', getSummaryMetrics)
 router.get('/summary-metrics/currency', (req,res) => {})
 router.get('/summary-metrics/type', (req,res) => {})
 router.get('/timeseries', getTimeseries)

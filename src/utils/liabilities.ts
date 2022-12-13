@@ -2,7 +2,6 @@ import prisma from "../server/db"
 import filter from 'lodash.filter'
 import { getFxRate, getFxRateTable } from "../utils/fx"
 
-
 //calculate outstanding principal of a loan based on terms and current date
 const periodsDifference = (firstDate, secondDate) => {
   const firstDateToISO = new Date(firstDate)
@@ -15,8 +14,7 @@ const periodsDifference = (firstDate, secondDate) => {
    return (secondDateYear - firstDateYear) * 12 + (secondDateMonths - firstDateMonths)
 }
 
-
-//memoize this function
+//TO - DO memoize this function
 export const outstandingPrincipal = (currentDate, startDate, originalPrincipal, interestRate, term) => {
   const monthsSinceIssuance = periodsDifference(startDate, currentDate)
   if (monthsSinceIssuance === 0) {
@@ -38,7 +36,7 @@ export const outstandingPrincipal = (currentDate, startDate, originalPrincipal, 
 
 export const outstandingPrincipalSeries = (currentDate, startDate, originalPrincipal, interestRate, term) => {
   const startDateISO = new Date(startDate)
-  const outputDates = startDateISO.toISOString()
+  const outputDates = startDateISO.toISOString().substring(0,10)
   const output = [{date: outputDates, principal: originalPrincipal }]
 
   const monthsSinceIssuance = periodsDifference(startDate, currentDate)
@@ -56,9 +54,7 @@ export const outstandingPrincipalSeries = (currentDate, startDate, originalPrinc
     monthlyPrincipalPayment = monthlyPayment - monthlyInterestPayment
     currentPrincipal = currentPrincipal - monthlyPrincipalPayment
 
-
-
-    output.push({date: new Date(startDateISO.setMonth(startDateISO.getMonth() + 1)).toISOString() ,principal: Math.round(currentPrincipal)})
+    output.push({date: new Date(startDateISO.setMonth(startDateISO.getMonth() + 1)).toISOString().substring(0,10) ,principal: Math.round(currentPrincipal)})
   }
   return output
 }
