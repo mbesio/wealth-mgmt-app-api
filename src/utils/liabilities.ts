@@ -1,6 +1,6 @@
 import prisma from "../server/db"
 import filter from 'lodash.filter'
-import { getFxRate, getFxRateTable } from "../utils/fx"
+import { getFxRate, getFxRateEUR, getFxRateTable, getFxRateUSD } from "../utils/fx"
 
 //calculate outstanding principal of a loan based on terms and current date
 const periodsDifference = (firstDate, secondDate) => {
@@ -80,13 +80,17 @@ const timeseriesOutput = liabilities.map(liability => {
   const currency = liability.currency
   const term = liability.term
   const timeseries = outstandingPrincipalSeries(currentDate, startDate, principal, interestRate, term)
-  const timeseriesWithCurrencies = timeseries.map( timestamp => {
+  const timeseriesWithCurrencies = timeseries.map( async timestamp => {
 
     const { date, principal } = timestamp
     const fxRates = filter(fx, {date: date})
     const fxRateTable = getFxRateTable(fxRates)
-    const amountEUR = getFxRate(currency, "EUR", fxRateTable) * principal
-    const amountUSD = getFxRate(currency, "USD", fxRateTable) * principal
+
+    const fxRateUSD = getFxRateUSD(currency, fxRateTable, date)
+    const fxRateEUR = getFxRateEUR(currency, fxRateTable, date, fxRateUSD)
+
+    const amountEUR = await fxRateUSD * principal
+    const amountUSD = await fxRateEUR * principal
     return {
       date,
       amountEUR,
@@ -102,5 +106,49 @@ const timeseriesOutput = liabilities.map(liability => {
   }
 })
 return timeseriesOutput
+}
+
+export const getLiabilitesAsOfDate = async (date) => {
+  const liabilities = await prisma.accountLiabilities.findMany()
+
+  const fx = await prisma.fX.findMany()
+  const isoDate = date.toISOString()
+
+  const liabilitiesWithCurrencies = liabilities.map( async liability => {
+  const startDate = liability.startDate
+  const principal = liability.principal
+  const interestRate = liability.interestRate
+  const currency = liability.currency
+  const term = liability.term
+  const currentPrincipal = outstandingPrincipal(isoDate, startDate, principal, interestRate, term)
+  const fxRates = filter(fx, {date: isoDate})
+  const fxRateTable = getFxRateTable(fxRates)
+
+  const fxRateUSD = await getFxRateUSD(currency, fxRateTable, isoDate)
+  const fxRateEUR = await getFxRateEUR(currency, fxRateTable, isoDate, fxRateUSD)
+
+  const amountEUR = fxRateUSD * currentPrincipal
+  const amountUSD = fxRateEUR * currentPrincipal
+
+  return {
+    amountEUR: amountEUR,
+    amountUSD: amountUSD,
+  }
+})
+
+const output = Promise.all(liabilitiesWithCurrencies).then(
+  result => {
+    let amountEUR = 0
+    let amountUSD = 0
+    for (let i = 0; i < result.length; i++ ) {
+      amountEUR += result[i].amountEUR
+      amountUSD += result[i].amountUSD
+    }
+    return {
+      amountEUR,
+      amountUSD
+    }
+  })
+  return output
 }
 

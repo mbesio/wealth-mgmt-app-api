@@ -11,12 +11,15 @@ datasource db {
 }
 
 model AccountAssets {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  name        String        @unique @db.VarChar(255)
-  currency    String
-  category    String
-  inputAssets InputAssets[]
+  id               String        @id @default(uuid())
+  createdAt        DateTime      @default(now())
+  name             String        @unique @db.VarChar(255)
+  currency         String
+  category         String
+  startDate        String
+  isActive         Boolean
+  deactivationDate String?
+  inputAssets      InputAssets[]
 }
 
 model AccountLiabilities {
@@ -24,40 +27,41 @@ model AccountLiabilities {
   createdAt        DateTime           @default(now())
   name             String             @unique @db.VarChar(255)
   currency         String
-  startDate        DateTime
+  startDate        String
   principal        Float
   interestRate     Float
   term             Int
+  isActive         Boolean
+  deactivationDate String?
   inputLiabilities InputLiabilities[]
 }
 
+// Rows for this table will be created through a cron job at the beginning of each month
+// The user will then be able to update the amount with the actual amount in the account value
 model InputAssets {
   id                 String        @id @default(uuid())
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
-  date               DateTime
+  date               String
   amount             Float
+  fxVsUSD            Float
+  fvVsEUR            Float
   belongsToAccountId String
   belongsTo          AccountAssets @relation(fields: [belongsToAccountId], references: [id])
 
   @@unique([date, belongsToAccountId])
 }
 
+// Rows for this table will be created through a cron job at the beginning of each month
+// User can only manage what get populated on this table by deactivating the related AccountLiability
 model InputLiabilities {
   id                 String             @id @default(uuid())
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   date               DateTime
   remainingPrincipal Float
+  fxVsUSD            Float
+  fvVsEUR            Float
   belongsToAccountId String
   belongsTo          AccountLiabilities @relation(fields: [belongsToAccountId], references: [id])
-}
-
-model FX {
-  id   String   @id @default(uuid())
-  date DateTime
-  pair String // this is pair vs Curr/USD
-  rate Float
-
-  @@unique([date, pair])
 }

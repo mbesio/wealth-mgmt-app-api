@@ -1,4 +1,6 @@
+import prisma from "../server/db"
 import { FX } from "@prisma/client"
+import { getfxRateAPI } from "./fxapi"
 
 export const getFxRate = (inputCurrency, outputCurrency, rateTable) => {
   if(inputCurrency === outputCurrency) {
@@ -41,4 +43,41 @@ export const combineByDate = (input : CombineByDateInput[]) : CombineByDateInput
     }
     return acc
   }, [])
+}
+
+
+export const getFxRateUSD = async (currency, fxRateTable, date) => {
+  let output = getFxRate(currency, "USD", fxRateTable)
+  if(!output) {
+    console.log('date before throwing in USD', date)
+    const dateForFunction = typeof date === 'string' ? date : date.toISOString()
+    const ratefromAPI = await getfxRateAPI(dateForFunction.substring(0,10), currency)
+
+    await prisma.fX.create({
+      data: {
+        date: date,
+        pair: `${currency}/USD`,
+        rate: ratefromAPI
+      }
+    })
+    output = ratefromAPI
+  }
+  return output
+}
+
+export const getFxRateEUR = async (currency, fxRateTable, date, fxRateUSD) => {
+  let output = getFxRate(currency, "EUR", fxRateTable)
+  if(!output) {
+    const dateForFunction = typeof date === 'string' ? date : date.toISOString()
+    const ratefromAPI = await getfxRateAPI(dateForFunction.substring(0,10), "EUR")
+    await prisma.fX.create({
+      data: {
+        date: date,
+        pair: 'EUR/USD',
+        rate: ratefromAPI
+      }
+    })
+    output = fxRateUSD / ratefromAPI
+  }
+  return output
 }

@@ -1,49 +1,34 @@
 import prisma from "../server/db"
 
 export const getAccountsAssets = async (req, res) => {
-
   const accountAssets = await prisma.accountAssets.findMany()
   res.json({data: accountAssets})
 }
 
 export const getAccountsLiabilities = async (req, res) => {
-
-  const accountLiabilities = await prisma.accountLiabilities.findMany()
-  res.json({data: accountLiabilities})
+  res.json({data: 'hello from getAccountsLiabilities'})
 }
 
 export const createAccountAssets = async (req, res) => {
-
+  const { name, currency, category, startDate, isActive } = req.body
+  // TO DO - add input validation
   const accountAsset = await prisma.accountAssets.create({
     data: {
-      name: req.body.name,
-      currency: req.body.currency,
-      category: req.body.category
+      name,
+      currency,
+      category,
+      startDate,
+      isActive
   }})
-
   res.json({data: accountAsset})
 }
 
 export const createAccountLiabilities = async (req, res) => {
 
-  const accountLiabilities = await prisma.accountLiabilities.create({
-    data: {
-      name: req.body.name,
-      currency: req.body.currency,
-      principal: req.body.principal,
-      interestRate: req.body.interestRate,
-      startDate: req.body.startDate,
-      term: req.body.term,
-  }})
-
-  res.json({data: accountLiabilities})
+  res.json({data: 'hello from createAccountLiabilities'})
 }
 
 export const deleteAccountLiabilities = async (req, res) => {
-  const deletedAccountLiabilities = await prisma.accountLiabilities.delete({
-    where: {
-      id: req.params.id
-    }
-  })
-  res.json({data: `account ${req.params.id} succesfully deleted`})
+
+  res.json({data: 'hello from deleteAccountLiabilities'})
 }

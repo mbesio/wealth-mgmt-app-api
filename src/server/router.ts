@@ -20,28 +20,32 @@ import {
 
 const router = Router()
 
+// Accounts
 router.get('/accounts-assets', getAccountsAssets)
 router.get('/accounts-liabilities', getAccountsLiabilities)
 
-router.post('/create-account-assets', createAccountAssets)
-router.post('/create-account-liabilities', createAccountLiabilities)
+router.post('/account-assets', createAccountAssets)
+router.post('/account-liabilities', createAccountLiabilities)
 
-router.delete('/accounts-assets/:id', () => {})
-router.delete('/accounts-liabilities/:id', deleteAccountLiabilities)
+router.put('/account-assets/:id', () => {})
+router.put('/account-liabilities/:id', () => {})
 
+router.delete('/account-assets/:id', () => {}) // user will not delete accounts, only deactivate
+router.delete('/account-liabilities/:id', deleteAccountLiabilities) // user will not delete accounts, only deactivate
+
+// Inputs
 router.get('/input-assets', getInputAssets)
 router.get('/input-liabilities', getInputLiabilites)
 
-router.post('/input-assets', createInputAssets)
+router.post('/input-assets', createInputAssets) // called by cron job monthly
+router.post('/input-liabilities', createInputLiabilities) // called by cron job monthly
 
-//ideally this is not required and I just compute the repayment plan based on the loan parameters
-router.post('/input-liabilities', createInputLiabilities)
-
-router.put('/input-assets/:id', (req,res) => {})
+router.put('/input-assets/:id', (req,res) => {}) // manually only update principal
 router.put('/input-liabilities/:id', (req,res) => {})
 
-router.post('/addfx', createFx)
+router.post('/addfx', createFx) // should not be required
 
+// Outputs
 router.get('/summary-metrics', getSummaryMetrics)
 router.get('/summary-metrics/currency', (req,res) => {})
 router.get('/summary-metrics/type', (req,res) => {})
