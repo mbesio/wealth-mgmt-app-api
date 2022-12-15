@@ -42,7 +42,7 @@ router.delete('/account-liabilities/:id', deleteAccountLiabilities)
 // Input Assets
 router.post('/input-assets', createInputAssets) // called by cron job monthly
 router.get('/input-assets', getInputAssets)
-router.put('/input-assets/amount/:id', (updateInputAssetAmount) => {}) // manually only update amount
+router.put('/input-assets/amount/:id', updateInputAssetAmount) // manually only update amount
 
 // Input Liabilities
 router.post('/input-liabilities', createInputLiabilities) // called by cron job monthly
