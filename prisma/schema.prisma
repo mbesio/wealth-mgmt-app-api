@@ -17,7 +17,7 @@ model AccountAssets {
   currency         String
   category         String
   startDate        String
-  isActive         Boolean
+  isActive         Boolean       @default(true)
   deactivationDate String?
   inputAssets      InputAssets[]
 }
@@ -31,7 +31,7 @@ model AccountLiabilities {
   principal        Float
   interestRate     Float
   term             Int
-  isActive         Boolean
+  isActive         Boolean            @default(true)
   deactivationDate String?
   inputLiabilities InputLiabilities[]
 }

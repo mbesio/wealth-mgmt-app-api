@@ -1,11 +1,16 @@
 import { Router } from 'express'
 import {
-  getAccountsAssets,
-  getAccountsLiabilities,
   createAccountAssets,
+  getAccountsAssets,
+  toggleIsActiveAccountAssets,
+  deleteAccountAssets
+   } from '../handlers/accountsAssets'
+import {
   createAccountLiabilities,
+  getAccountsLiabilities,
+  toggleIsActiveAccountLiabilites,
   deleteAccountLiabilities
-   } from '../handlers/accounts'
+    } from '../handlers/accountsLiabilities'
 import {
   createFx,
   createInputAssets,
@@ -20,18 +25,17 @@ import {
 
 const router = Router()
 
-// Accounts
-router.get('/accounts-assets', getAccountsAssets)
-router.get('/accounts-liabilities', getAccountsLiabilities)
-
+// Accounts Assets
 router.post('/account-assets', createAccountAssets)
+router.get('/accounts-assets', getAccountsAssets)
+router.put('/account-assets/toggle-active/:id', toggleIsActiveAccountAssets)
+router.delete('/account-assets/:id', deleteAccountAssets)
+
+// Accounts Liabilities
 router.post('/account-liabilities', createAccountLiabilities)
-
-router.put('/account-assets/:id', () => {})
-router.put('/account-liabilities/:id', () => {})
-
-router.delete('/account-assets/:id', () => {}) // user will not delete accounts, only deactivate
-router.delete('/account-liabilities/:id', deleteAccountLiabilities) // user will not delete accounts, only deactivate
+router.get('/accounts-liabilities', getAccountsLiabilities)
+router.put('/account-liabilities/:id', toggleIsActiveAccountLiabilites)
+router.delete('/account-liabilities/:id', deleteAccountLiabilities)
 
 // Inputs
 router.get('/input-assets', getInputAssets)
