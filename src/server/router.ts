@@ -50,9 +50,7 @@ router.get('/input-liabilities', getInputLiabilites)
 router.put('/input-liabilities/amount/:id', (req,res) => {}) // should not be required
 
 // Outputs
-router.get('/summary-metrics', getSummaryMetrics)
-router.get('/summary-metrics/currency', (req,res) => {})
-router.get('/summary-metrics/type', (req,res) => {})
 router.get('/timeseries', getTimeseries)
+router.get('/summary-metrics', getSummaryMetrics)
 
 export default router
