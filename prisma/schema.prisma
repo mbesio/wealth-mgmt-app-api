@@ -45,7 +45,7 @@ model InputAssets {
   date               String
   amount             Float
   fxVsUSD            Float
-  fvVsEUR            Float
+  fxVsEUR            Float
   belongsToAccountId String
   belongsTo          AccountAssets @relation(fields: [belongsToAccountId], references: [id])
 
@@ -61,7 +61,7 @@ model InputLiabilities {
   date               DateTime
   remainingPrincipal Float
   fxVsUSD            Float
-  fvVsEUR            Float
+  fxVsEUR            Float
   belongsToAccountId String
   belongsTo          AccountLiabilities @relation(fields: [belongsToAccountId], references: [id])
 }
