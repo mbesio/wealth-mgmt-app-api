@@ -1,8 +1,9 @@
-import prisma from "../server/db"
+import prisma from '../server/db'
 
 // called by the cron job
 export const createInputLiabilities = async (req, res) => {
-  const {date, remainingPrincipal, fxVsUSD, fxVsEUR, belongsToAccountId } = req.body
+  const { date, remainingPrincipal, fxVsUSD, fxVsEUR, belongsToAccountId } =
+    req.body
 
   const inputLiabilites = await prisma.inputLiabilities.create({
     data: {
@@ -10,18 +11,17 @@ export const createInputLiabilities = async (req, res) => {
       remainingPrincipal,
       fxVsUSD,
       fxVsEUR,
-      belongsToAccountId
-    }
+      belongsToAccountId,
+    },
   })
-  res.json({data: inputLiabilites})
+  res.json({ data: inputLiabilites })
 }
 
 export const getInputLiabilites = async (req, res) => {
   const inputLiabilities = await prisma.inputLiabilities.findMany({
     include: {
-      belongsTo: true
-    }
+      belongsTo: true,
+    },
   })
-  res.json({data: inputLiabilities})
+  res.json({ data: inputLiabilities })
 }
-

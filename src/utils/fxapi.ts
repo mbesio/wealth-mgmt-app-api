@@ -1,14 +1,15 @@
 import axios from 'axios'
 import { Dayjs } from 'dayjs'
 
-export const formtDate = (dayjsdate: Dayjs) => `${dayjsdate.year()}-${dayjsdate.month()+1}-${dayjsdate.date()}`
+export const formtDate = (dayjsdate: Dayjs) =>
+  `${dayjsdate.year()}-${dayjsdate.month() + 1}-${dayjsdate.date()}`
 
 const getfxRateAPINoMemoize = async (date, currency, currencyBase) => {
   const apikey = process.env.API_KEY
   const config = {
     headers: {
-      apikey: apikey
-    }
+      apikey: apikey,
+    },
   }
   const url = `https://api.apilayer.com/exchangerates_data/${date}?base=${currency}&symbols=${currencyBase}`
   const rate = await axios.get(url, config)
@@ -25,7 +26,7 @@ const memoize = (fn) => {
   const cache = {}
   return async (...args) => {
     const inputArgs = constructPropertyFromArgs(fn, args)
-    if(!cache[inputArgs]) {
+    if (!cache[inputArgs]) {
       cache[inputArgs] = await fn(...args)
     }
     return cache[inputArgs]

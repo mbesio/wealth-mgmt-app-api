@@ -1,4 +1,4 @@
-import prisma from "../server/db"
+import prisma from '../server/db'
 
 export const createAccountAssets = async (req, res) => {
   const { name, currency, category, startDate, isActive } = req.body
@@ -9,15 +9,15 @@ export const createAccountAssets = async (req, res) => {
       currency,
       category,
       startDate,
-      isActive
-    }
+      isActive,
+    },
   })
-    res.json({data: accountAsset})
+  res.json({ data: accountAsset })
 }
 
 export const getAccountsAssets = async (req, res) => {
   const accountAssets = await prisma.accountAssets.findMany()
-  res.json({data: accountAssets})
+  res.json({ data: accountAssets })
 }
 
 export const toggleIsActiveAccountAssets = async (req, res) => {
@@ -25,22 +25,21 @@ export const toggleIsActiveAccountAssets = async (req, res) => {
   const { isActive } = req.body
   const accountAsset = await prisma.accountAssets.update({
     where: {
-      id: id
+      id: id,
     },
     data: {
-      isActive
-    }
+      isActive,
+    },
   })
-  res.json({data: accountAsset})
+  res.json({ data: accountAsset })
 }
-
 
 export const deleteAccountAssets = async (req, res) => {
   const { id } = req.params
   await prisma.accountAssets.delete({
     where: {
-      id
-    }
+      id,
+    },
   })
-  res.json({data: `Account Asset ${id} succesfully deleted`})
+  res.json({ data: `Account Asset ${id} succesfully deleted` })
 }

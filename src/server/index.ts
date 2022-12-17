@@ -1,8 +1,8 @@
-import app  from './server'
+import app from './server'
 import { launchInputAssetsCronJob } from '../cron/inputsAssets'
 import { launchInputLiabilitiesCronJob } from '../cron/inputsLiabilities'
 
- // TO DO - check if cron jobs are running correctly
+// TO DO - check if cron jobs are running correctly
 launchInputAssetsCronJob()
 launchInputLiabilitiesCronJob()
 

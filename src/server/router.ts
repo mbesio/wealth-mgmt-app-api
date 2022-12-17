@@ -3,27 +3,24 @@ import {
   createAccountAssets,
   getAccountsAssets,
   toggleIsActiveAccountAssets,
-  deleteAccountAssets
-   } from '../handlers/accountsAssets'
+  deleteAccountAssets,
+} from '../handlers/accountsAssets'
 import {
   createAccountLiabilities,
   getAccountsLiabilities,
   toggleIsActiveAccountLiabilites,
-  deleteAccountLiabilities
-    } from '../handlers/accountsLiabilities'
+  deleteAccountLiabilities,
+} from '../handlers/accountsLiabilities'
 import {
   createInputAssets,
   getInputAssets,
-  updateInputAssetAmount
+  updateInputAssetAmount,
 } from '../handlers/inputsAssets'
 import {
   createInputLiabilities,
-  getInputLiabilites
+  getInputLiabilites,
 } from '../handlers/inputsLiabilites'
-import {
-  getSummaryMetrics,
-  getTimeseries
-} from '../handlers/outputs'
+import { getSummaryMetrics, getTimeseries } from '../handlers/outputs'
 
 const router = Router()
 
@@ -36,7 +33,10 @@ router.delete('/account-assets/:id', deleteAccountAssets)
 // Accounts Liabilities
 router.post('/account-liabilities', createAccountLiabilities)
 router.get('/accounts-liabilities', getAccountsLiabilities)
-router.put('/account-liabilities/toggle-active/:id', toggleIsActiveAccountLiabilites)
+router.put(
+  '/account-liabilities/toggle-active/:id',
+  toggleIsActiveAccountLiabilites
+)
 router.delete('/account-liabilities/:id', deleteAccountLiabilities)
 
 // Input Assets
@@ -47,7 +47,7 @@ router.put('/input-assets/amount/:id', updateInputAssetAmount) // manually only 
 // Input Liabilities
 router.post('/input-liabilities', createInputLiabilities) // called by cron job monthly
 router.get('/input-liabilities', getInputLiabilites)
-router.put('/input-liabilities/amount/:id', (req,res) => {}) // should not be required
+router.put('/input-liabilities/amount/:id', (req, res) => {}) // should not be required
 
 // Outputs
 router.get('/timeseries', getTimeseries)
