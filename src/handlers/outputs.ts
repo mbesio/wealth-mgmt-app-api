@@ -1,6 +1,6 @@
 import prisma from '../server/db'
 import find from 'lodash.find'
-import { combineAmountsByDate, combineDates } from '../utils/inputs'
+import { combineAmountsByDate, combineDates } from '../utils/outputs'
 
 export const getTimeseries = async (req, res) => {
 
@@ -51,13 +51,13 @@ export const getTimeseries = async (req, res) => {
 }
 
 export const getSummaryMetrics = async (req, res) => {
-  const currentDateObj = await prisma.inputAssets.findFirst({
+  const currentDateObj = await prisma.inputAssets.findMany({
     orderBy: [{
       date: 'desc',
     }],
     take: 1
   })
-  const currentDate = currentDateObj.date
+  const currentDate = currentDateObj[0].date
   const currentAssets = await prisma.inputAssets.findMany({
     where: {
       date: currentDate
