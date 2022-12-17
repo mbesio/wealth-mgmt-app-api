@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Dayjs } from 'dayjs'
 
-export const dateForFXAPI = (dayjsdate: Dayjs) => `${dayjsdate.year()}-${dayjsdate.month()+1}-${dayjsdate.date()}`
+export const formtDate = (dayjsdate: Dayjs) => `${dayjsdate.year()}-${dayjsdate.month()+1}-${dayjsdate.date()}`
 
 const getfxRateAPINoMemoize = async (date, currency, currencyBase) => {
   const apikey = process.env.API_KEY

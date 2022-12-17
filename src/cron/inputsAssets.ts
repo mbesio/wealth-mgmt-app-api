@@ -1,11 +1,12 @@
 import dayjs from 'dayjs'
 import prisma from "../server/db"
 import nodeCron from 'node-cron'
-import {dateForFXAPI, getfxRateAPI } from "../utils/fxapi"
+import get from 'lodash.get'
+import {formtDate, getfxRateAPI} from "../utils/fxapi"
 
 const inputsAssetsCronJob = async () => {
   const currentDate = dayjs()
-  const date = dateForFXAPI(currentDate)
+  const date = formtDate(currentDate)
 
   const activeAccountAssets = await prisma.accountAssets.findMany({
     where: {
@@ -24,12 +25,10 @@ const inputsAssetsCronJob = async () => {
         take: 1
       })
 
-    const currency = asset.currency // TO DO - refactor with lodash get
+    const currency = get(asset, 'currency')
 
     const newFxVsUSD = currency === 'USD' ? 1 : await getfxRateAPI(date, currency, 'USD')
     const newFxVsEUR = currency === 'EUR' ? 1 : await getfxRateAPI(date, currency, 'EUR')
-    console.log('newFxVsUSD ', newFxVsUSD )
-    console.log('newFxVsEUR ', newFxVsEUR )
 
     const newInput = await prisma.inputAssets.create({
       data: {
@@ -40,7 +39,7 @@ const inputsAssetsCronJob = async () => {
         belongsToAccountId: asset.id
       }
     })
-    console.log('cronjob completed - ', newInput)
+    console.log('cronjob assets completed - ', newInput)
   })
 }
 
