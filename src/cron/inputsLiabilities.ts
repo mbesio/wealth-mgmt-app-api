@@ -51,6 +51,7 @@ const inputsLiabilitiesCronJob = async () => {
 export const launchInputLiabilitiesCronJob = () => {
   const inputLiabilitiesCronSchedule = nodeCron.schedule(
     '0 5 1 * *',
+    // '* * * * *',
     inputsLiabilitiesCronJob,
     {
       scheduled: true,
