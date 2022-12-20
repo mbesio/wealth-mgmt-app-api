@@ -14,8 +14,6 @@ const getfxRateAPINoMemoize = async (date, currency, currencyBase) => {
   }
   const url = `https://api.apilayer.com/exchangerates_data/${date}?base=${currency}&symbols=${currencyBase}`
   const rate = await axios.get(url, config)
-  console.log('rate - fromt the api ', rate)
-  console.log('rate.data.rates[currencyBase] ', rate.data.rates[currencyBase])
   return rate.data.rates[currencyBase]
 }
 

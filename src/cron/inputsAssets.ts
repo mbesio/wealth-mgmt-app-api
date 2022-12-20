@@ -6,7 +6,7 @@ import { formtDate, getfxRateAPI } from '../utils/fxapi'
 
 const inputsAssetsCronJob = async () => {
   const currentDate = dayjs()
-  const date = formtDate(currentDate)
+  const currentDateFormatted = formtDate(currentDate)
 
   const activeAccountAssets = await prisma.accountAssets.findMany({
     where: {
@@ -30,20 +30,29 @@ const inputsAssetsCronJob = async () => {
     const currency = get(asset, 'currency')
 
     const newFxVsUSD =
-      currency === 'USD' ? 1 : await getfxRateAPI(date, currency, 'USD')
+      currency === 'USD'
+        ? 1
+        : await getfxRateAPI(currentDateFormatted, currency, 'USD')
     const newFxVsEUR =
-      currency === 'EUR' ? 1 : await getfxRateAPI(date, currency, 'EUR')
+      currency === 'EUR'
+        ? 1
+        : await getfxRateAPI(currentDateFormatted, currency, 'EUR')
+
+    if (currentDateFormatted === latestInput[0].date) {
+      // if this condition is true, it creates a duplicate input
+      // return statement
+      return
+    }
 
     const newInput = await prisma.inputAssets.create({
       data: {
-        date,
-        amount: latestInput[0].amount,
+        date: currentDateFormatted,
+        amount: latestInput[0]?.amount || 0,
         fxVsUSD: newFxVsUSD,
         fxVsEUR: newFxVsEUR,
         belongsToAccountId: asset.id,
       },
     })
-    console.log('cronjob assets completed - ', newInput)
   })
 }
 
