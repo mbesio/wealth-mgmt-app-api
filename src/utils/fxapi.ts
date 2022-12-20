@@ -8,12 +8,15 @@ const getfxRateAPINoMemoize = async (date, currency, currencyBase) => {
   const apikey = process.env.API_KEY
   const config = {
     headers: {
+      'Accept-Encoding': 'gzip,deflate,compress',
       apikey: apikey,
     },
   }
   const url = `https://api.apilayer.com/exchangerates_data/${date}?base=${currency}&symbols=${currencyBase}`
   const rate = await axios.get(url, config)
-  return rate.data.rates.USD
+  console.log('rate - fromt the api ', rate)
+  console.log('rate.data.rates[currencyBase] ', rate.data.rates[currencyBase])
+  return rate.data.rates[currencyBase]
 }
 
 const constructPropertyFromArgs = (fn, args) => {
