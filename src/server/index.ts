@@ -6,6 +6,8 @@ import { launchInputLiabilitiesCronJob } from '../cron/inputsLiabilities'
 launchInputAssetsCronJob()
 launchInputLiabilitiesCronJob()
 
-app.listen(3001, () => {
-  console.log('hello from port 3001')
+const PORT = process.env.PORT
+
+app.listen(PORT, () => {
+  console.log(`hello from port ${PORT}`)
 })
